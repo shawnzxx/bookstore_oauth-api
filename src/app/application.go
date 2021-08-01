@@ -14,16 +14,13 @@ var (
 
 func StartApplication() {
 	// When app bootup we want to test db connection first, if can not connect we want to stop process
-	session, dbErr := cassandra.GetSession()
-	if dbErr != nil {
-		panic(dbErr)
-	}
-	session.Close()
+	_ = cassandra.GetSession()
 
 	dbRepository := db.NewRepository()
 	atService := access_token.NewService(dbRepository)
 	atHandler := http.NewHandler(atService)
 
 	router.GET("/ouath/access_token/:access_token_id", atHandler.GetById)
+	router.POST("/ouath/access_token", atHandler.Create)
 	router.Run(":8080")
 }
