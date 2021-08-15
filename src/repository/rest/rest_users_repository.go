@@ -11,7 +11,7 @@ import (
 
 var (
 	userRestClient = rest.RequestBuilder{
-		BaseURL: "https://api.bookstore.com",
+		BaseURL: "http://localhost:8080",
 		Timeout: 100 * time.Microsecond,
 	}
 )
