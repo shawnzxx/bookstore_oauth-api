@@ -15,3 +15,6 @@ VALUES ('9876', 2, toTimeStamp(now()));
 INSERT INTO store.shopping_cart
 (userid, item_count, last_update_timestamp)
 VALUES ('1234', 5, toTimeStamp(now()));
+
+-- Connect to local docker cassandra
+docker run -it --network docker_some-network --rm cassandra cqlsh some-cassandra

@@ -22,7 +22,7 @@ func TestLoginUserTimeoutFromApi(t *testing.T) {
 	rest.FlushMockups()
 	rest.AddMockups(&rest.Mock{
 		HTTPMethod:   http.MethodPost,
-		URL:          "http://localhost:8080/users/login",
+		URL:          "http://localhost:8081/users/login",
 		ReqBody:      `{"email":"email1@gmail.com","password":"my_password"}`,
 		RespHTTPCode: -1,
 		RespBody:     `{}`, //return invalid error interfaces
@@ -41,7 +41,7 @@ func TestLoginUserInvalidErrorInterface(t *testing.T) {
 	rest.FlushMockups()
 	rest.AddMockups(&rest.Mock{
 		HTTPMethod:   http.MethodPost,
-		URL:          "http://localhost:8080/users/login",
+		URL:          "http://localhost:8081/users/login",
 		ReqBody:      `{"email":"email2@gmail.com","password":"my_password"}`,
 		RespHTTPCode: http.StatusNotFound,
 		//status return as string instead of number, simulate wrong rest error interface
@@ -61,7 +61,7 @@ func TestLoginUserInvalidLoginCredentails(t *testing.T) {
 	rest.FlushMockups()
 	rest.AddMockups(&rest.Mock{
 		HTTPMethod:   http.MethodPost,
-		URL:          "http://localhost:8080/users/login",
+		URL:          "http://localhost:8081/users/login",
 		ReqBody:      `{"email":"email3@gmail.com","password":"my_password"}`,
 		RespHTTPCode: http.StatusNotFound,
 		//this return 404 not found error and message as "invalid login credentials"
@@ -81,7 +81,7 @@ func TestLoginUserInvalidUserJsonResponse(t *testing.T) {
 	rest.FlushMockups()
 	rest.AddMockups(&rest.Mock{
 		HTTPMethod:   http.MethodPost,
-		URL:          "http://localhost:8080/users/login",
+		URL:          "http://localhost:8081/users/login",
 		ReqBody:      `{"email":"email4@gmail.com","password":"my_password"}`,
 		RespHTTPCode: http.StatusOK,
 		//we simulate return wrong json struct, id should be int64 instead of string
@@ -101,7 +101,7 @@ func TestLoginUserNoError(t *testing.T) {
 	rest.FlushMockups()
 	rest.AddMockups(&rest.Mock{
 		HTTPMethod:   http.MethodPost,
-		URL:          "http://localhost:8080/users/login",
+		URL:          "http://localhost:8081/users/login",
 		ReqBody:      `{"email":"email5@gmail.com","password":"my_password"}`,
 		RespHTTPCode: http.StatusOK,
 		RespBody:     `{"id":1,"first_name":"Xiaoxiao","last_name":"Zhang","email":"shawnzhang.dev@gmail.com"}`,
