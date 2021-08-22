@@ -6,6 +6,6 @@ require (
 	github.com/federicoleon/golang-restclient v0.0.0-20191104170228-162ed620df66
 	github.com/gin-gonic/gin v1.7.2
 	github.com/gocql/gocql v0.0.0-20210707082121-9a3953d1826d
-	github.com/shawnzxx/bookstore_utils-go v0.0.0-20210822032222-7f6056ce5949 // indirect
+	github.com/shawnzxx/bookstore_utils-go v0.0.0-20210822032222-7f6056ce5949
 	github.com/stretchr/testify v1.7.0
 )
