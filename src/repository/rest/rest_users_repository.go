@@ -2,11 +2,12 @@ package rest
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/federicoleon/golang-restclient/rest"
 	"github.com/shawnzxx/bookstore_oauth-api/src/domain/users"
-	"github.com/shawnzxx/bookstore_oauth-api/src/utils/errors"
+	"github.com/shawnzxx/bookstore_utils-go/rest_errors"
 )
 
 var (
@@ -17,7 +18,7 @@ var (
 )
 
 type RestUserRepository interface {
-	LoginUser(string, string) (*users.User, *errors.RestErr)
+	LoginUser(string, string) (*users.User, *rest_errors.RestErr)
 }
 
 type restUserRepository struct {
@@ -27,7 +28,7 @@ func NewRestUsersRepository() RestUserRepository {
 	return &restUserRepository{}
 }
 
-func (r *restUserRepository) LoginUser(email string, password string) (*users.User, *errors.RestErr) {
+func (r *restUserRepository) LoginUser(email string, password string) (*users.User, *rest_errors.RestErr) {
 	request := users.UserLoginRequest{
 		Email:    email,
 		Password: password,
@@ -35,17 +36,17 @@ func (r *restUserRepository) LoginUser(email string, password string) (*users.Us
 	response := userRestClient.Post("/users/login", request)
 
 	if response == nil || response.Response == nil {
-		return nil, errors.NewInternalServerError("restclient request timeout when trying to login user")
+		return nil, rest_errors.NewInternalServerError("rest client request time out when trying to login user", errors.New("database error"))
 	}
 
 	// means error happened
 	if response.StatusCode > 299 {
-		var restErr errors.RestErr
+		var restErr rest_errors.RestErr
 		// since we use same rest error struct for both auth and user service
 		// if can not unmarshal response means someone changed the struct
 		err := json.Unmarshal(response.Bytes(), &restErr)
 		if err != nil {
-			return nil, errors.NewInternalServerError("invalid error interface when trying to login user")
+			return nil, rest_errors.NewInternalServerError("invalid error interface when trying to login user", errors.New("database error"))
 		}
 		// error struct no change return real response error
 		return nil, &restErr
@@ -54,7 +55,7 @@ func (r *restUserRepository) LoginUser(email string, password string) (*users.Us
 	var user users.User
 	err := json.Unmarshal(response.Bytes(), &user)
 	if err != nil {
-		return nil, errors.NewInternalServerError("error when trying to unmarshal users login response")
+		return nil, rest_errors.NewInternalServerError("error when trying to unmarshal users login response", errors.New("database error"))
 	}
 	return &user, nil
 }
