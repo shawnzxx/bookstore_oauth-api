@@ -3,7 +3,7 @@ package cassandra
 import (
 	"fmt"
 	"github.com/gocql/gocql"
-	"log"
+	"github.com/shawnzxx/bookstore_utils-go/app_logger"
 	"os"
 	"time"
 )
@@ -13,6 +13,7 @@ const (
 )
 
 var (
+	appLog  = app_logger.GetLogger()
 	session *gocql.Session
 	host    = os.Getenv(DBHost)
 )
@@ -28,9 +29,10 @@ func init() {
 		session, err = cluster.CreateSession()
 		if err != nil {
 			if retryCount == 0 {
-				log.Fatalf("Not able to establish connection to host %s", host)
+				appLog.Error("Not able to establish connection to host %s", host)
+				os.Exit(1)
 			}
-			log.Printf(fmt.Sprintf("Could not connect to database. Wait 5 seconds. %d retries left...", retryCount))
+			appLog.Info(fmt.Sprintf("Could not connect to database. Wait 5 seconds. %d retries left...", retryCount))
 			retryCount--
 			time.Sleep(5 * time.Second)
 		} else {

@@ -36,7 +36,7 @@ func (r *restUserRepository) LoginUser(email string, password string) (*users.Us
 	response := userRestClient.Post("/users/login", request)
 
 	if response == nil || response.Response == nil {
-		return nil, rest_errors.NewInternalServerError("rest client request time out when trying to login user", errors.New("database error"))
+		return nil, rest_errors.NewInternalServerError("rest client request error when trying to login user", errors.New("database error"))
 	}
 
 	// means error happened

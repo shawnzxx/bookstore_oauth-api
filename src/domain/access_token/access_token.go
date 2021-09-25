@@ -1,6 +1,8 @@
 package access_token
 
 import (
+	"fmt"
+	crypto_utils "github.com/shawnzxx/bookstore_oauth-api/src/utils"
 	"strings"
 	"time"
 
@@ -48,6 +50,8 @@ func (at *AccessTokenRequest) Validate() *rest_errors.RestErr {
 	default:
 		return rest_errors.NewBadRequestError("invalid grant_type parameter")
 	}
+
+	//TODO: Validate parameters for each grant_type
 	return nil
 }
 
@@ -87,5 +91,5 @@ func (at AccessToken) IsExpired() bool {
 }
 
 func (at *AccessToken) Generate() {
-
+	at.AccessToken = crypto_utils.GetMd5(fmt.Sprintf("at-%d-%d-ran", at.UserId, at.Expires))
 }
