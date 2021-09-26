@@ -1,7 +1,6 @@
 package http
 
 import (
-	"encoding/json"
 	"github.com/shawnzxx/bookstore_utils-go/app_logger"
 	"net/http"
 
@@ -35,8 +34,6 @@ func (handler *accessTokenHandler) GetById(c *gin.Context) {
 	accessToken, restErr := handler.service.GetById(c.Param("access_token_id"))
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
-		errByte, _ := json.Marshal(restErr)
-		logger.Error("restErr %v", string(errByte))
 		return
 	}
 	c.JSON(http.StatusOK, accessToken)
@@ -47,16 +44,12 @@ func (handler *accessTokenHandler) Create(c *gin.Context) {
 	if err := c.ShouldBindJSON(&request); err != nil {
 		restErr := rest_errors.NewBadRequestError("invalid json body")
 		c.JSON(restErr.Status, restErr)
-		errByte, _ := json.Marshal(restErr)
-		logger.Error("restErr %v", string(errByte))
 		return
 	}
 
 	accessToken, restErr := handler.service.Create(request)
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
-		errByte, _ := json.Marshal(restErr)
-		logger.Error("restErr %v", string(errByte))
 		return
 	}
 	c.JSON(http.StatusCreated, accessToken)
